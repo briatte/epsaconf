@@ -40,7 +40,7 @@ Example format from APSA:
 
 | year | session | type	| session_title	| paper	| paper_title	| abstract | pid | full_name | first_name | affiliation | role |
 |------|---------|------|---------------|-------|-------------|----------|-----|-----------|------------|-------------|------|
-| 2015 | 1000053 | Full Panel	| Authoritarianism, [...] | NA | NA | NA | 5650271 | Jillian M. Schwedler | Jillian | Hunter College | c
-| 2015 | 1000053 | Full Panel	| Authoritarianism, [...] | NA | NA | NA | 5660835 | Tarek E. Masoud | Tarek | Harvard University | d
-| 2015 | 1000053 | Full Panel	| Authoritarianism, [...] | 1000057 | Judiciary-Police Relations [...] | During [...] | 5643721 | Dina I. Rashed | Dina | NA | p
+| 2015 | 1000053 | Full Panel	| Auth… | NA | NA | NA | 5650271 | Jillian M. Schwedler | Jillian | Hunter College | c
+| 2015 | 1000053 | Full Panel	| Auth… | NA | NA | NA | 5660835 | Tarek E. Masoud | Tarek | Harvard University | d
+| 2015 | 1000053 | Full Panel	| Auth… | 1000057 | Judic… | During… | 5643721 | Dina I. Rashed | Dina | NA | p
 
