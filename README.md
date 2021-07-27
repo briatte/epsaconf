@@ -125,5 +125,10 @@ bind_rows(
     add_column(year = 2020L, .before = 1),
   read_tsv("data/epsa2021-program.tsv", col_types = cols(.default = "c")) %>% 
     add_column(year = 2020L, .before = 1)
-)
+) %>% 
+  # 2,007 unique names
+  pull(full_name) %>% 
+  unique() %>% 
+  sort() %>% 
+  length()
 ```
