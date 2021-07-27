@@ -22,8 +22,8 @@ e <- select(d, i = pid, j = session_id, role) %>%
 # [NOTE]
 #
 # edges sometimes repeat as some authors have 2+ papers in a same panel
-# - e.g. Bernauer, Fesenfeld in session 4536
-# - e.g. Wøien Hansen in session 4249
+# - e.g. Müller in session 19, abstracts 0024 and 0032
+# - e.g. Giger in session 23, abstracts 0017 and 0042
 #
 # happens only to presenters, not chairs or discussants
 stopifnot(e$role[ duplicated(e) ] == "p")
