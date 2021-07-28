@@ -1090,4 +1090,3 @@ Zeppelin University, Friedrichshafen	https://api.ror.org/organizations?affiliati
 Zeppelin University, Friedrichshafen && University of Konstanz	https://api.ror.org/organizations?affiliation=Zeppelin+University,+Friedrichshafen+&&+University+of+Konstanz	24	TRUE	1	PHRASE	Zeppelin University	https://ror.org/05tbp1g38	Germany
 Zeppelin University, Germany	https://api.ror.org/organizations?affiliation=Zeppelin+University,+Germany	4	TRUE	1	PHRASE	Zeppelin University	https://ror.org/05tbp1g38	Germany
 Zurich, Switzerland	https://api.ror.org/organizations?affiliation=Zurich,+Switzerland	13	FALSE	0.62	COMMON TERMS	Zurich Insurance Group (Switzerland)	https://ror.org/03cw8qd03	Switzerland
-								

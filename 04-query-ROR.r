@@ -5,6 +5,7 @@ library(jsonlite)
 a <- fs::dir_ls("data", regexp = "participants") %>%
   map(readr::read_tsv, col_types = cols(.default = "c")) %>%
   map_dfr(select, affiliation) %>%
+  filter(!is.na(affiliation)) %>%
   distinct()
 
 cat("Querying ROR for", nrow(a), "affiliations")
@@ -49,14 +50,19 @@ for (i in nrow(d):1) {
     next
   }
 
-  cat("", httr::status_code(r), "\n")
   Sys.sleep(0.75)
 
   if (httr::status_code(r) != 200) {
-    next
-  }
 
-  d$ror[ i ] <- httr::content(r, as = "text", encoding = "UTF-8")
+    cat(" error", httr::status_code(r), "\n")
+    next
+
+  } else {
+
+    cat(" OK\n")
+    d$ror[ i ] <- httr::content(r, as = "text", encoding = "UTF-8")
+
+  }
 
 }
 
