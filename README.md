@@ -4,9 +4,9 @@ Code to collect and assemble the full programmes of three recent [EPSA](https://
 - [`epsa2020`](https://github.com/briatte/epsa2020) (virtual event)
 - [`epsa2021`](https://github.com/briatte/epsa2021) (virtual event)
 
-This repository is __work in progress__, and some links point to a private repository.
+This repository is __work in progress__, and some links point to a private repository. See the [issues](issues) for further details.
 
-See the [issues](issues) for further details.
+Some scripts require external resources not included in the repo: `fix-affiliations`, in particular, requires [this spreadsheet of manual checks and corrections to ROR guesses](###), as well as a [ROR data dump](https://ror.readme.io/docs/data-dump), to be located in the `data` folder.
 
 # Data
 
