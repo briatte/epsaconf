@@ -3,6 +3,10 @@ Code to collect and assemble the full programmes of three recent [EPSA](https://
 - [`epsa2019`](https://github.com/briatte/epsa2019)
 - [`epsa2020`](https://github.com/briatte/epsa2020) (virtual event)
 - [`epsa2021`](https://github.com/briatte/epsa2021) (virtual event)
+- [`epsa2022`](https://github.com/briatte/epsa2022)
+- [`epsa2023`](https://github.com/briatte/epsa2023)
+
+__TODO:__ document years 2022 and 2023 below.
 
 This repository is __work in progress__, and some links point to a private repository. See the [issues](issues) for further details.
 
