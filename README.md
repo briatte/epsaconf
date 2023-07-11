@@ -1,4 +1,4 @@
-Code to collect and assemble the full programmes of three recent [EPSA](https://epsanet.org/) conferences:
+Code to collect and assemble the full programmes of recent [EPSA](https://epsanet.org/) conferences:
 
 - [`epsa2019`](https://github.com/briatte/epsa2019)
 - [`epsa2020`](https://github.com/briatte/epsa2020) (virtual event)
@@ -6,63 +6,74 @@ Code to collect and assemble the full programmes of three recent [EPSA](https://
 - [`epsa2022`](https://github.com/briatte/epsa2022)
 - [`epsa2023`](https://github.com/briatte/epsa2023)
 
-__TODO:__ document years 2022 and 2023 below.
+__TODO:__ document year 2022 below.
 
 This repository is __work in progress__, and some links point to a private repository. See the [issues](issues) for further details.
 
 Some scripts require external resources not included in the repo: `fix-affiliations`, in particular, requires [this spreadsheet of manual checks and corrections to ROR guesses](###), as well as a [ROR data dump](https://ror.readme.io/docs/data-dump), to be located in the `data` folder.
 
+__TODO:__ add spreadsheet link.
+
 # Data
 
-Numbers of rows in program extracts:
+|                  | 2019 | 2020 | 2021 | 2022 | 2023 |
+|:-----------------|:----:|:----:|:----:|:----:|:----:|
+| Participants (1) | 1318 |  298 |  792 |  ... | 1863 |
+| Affiliations (1) |  521 |  189 |  393 |  ... |  635 |
+| Panels           |  186 |   32 |  131 |  ... |  258 |
+| Abstracts        |  802 |  136 |  517 |  ... | 1127 |
+| Edges (2)        | 1964 |  319 | 1262 |  ... | 2912 |
 
-|                  | 2019 | 2020 | 2021 |
-|:-----------------|:----:|:----:|:----:|
-| Edges            | 1964 |  319 | 1262 |
-| Participants (1) | 1318 |  298 |  808 |
-| Panels           |  186 |   32 |  131 |
-| Abstracts        |  802 |  136 |  517 |
-
-1. before fixing names/affiliations
+1. After minimal data cleaning; the number of unique affiliations, in particular, is highly inflated.
+2. Defined as the presence of a participant `i` in a conference panel `j` as either chair (`"c"`), discussant (`"d"`) or presenter (`"p"`).
 
 ```r
 library(tidyverse)
-fs::dir_ls("data") %>%
+
+# participants, panels, abstracts and edges
+fs::dir_ls("data", regexp = "epsa\\d{4}") %>%
   map(read_tsv, col_types = cols(.default = "c")) %>%
   map_int(nrow)
+
+# unique affiliations
+fs::dir_ls("data", regexp = "epsa\\d{4}-participants") %>%
+  map(read_tsv, col_types = cols(.default = "c")) %>%
+  map_int(~ n_distinct(.x$affiliation))
 ```
 
 ## Variables
 
-|                   | [2019][2019] | [2020][2020] | [2021][2021] |
-|:------------------|:------------:|:------------:|:------------:|
-panel id (file)     |  x           |  x           |  x           |
-panel ref           |  x           |  NA          |  x           |
-panel title         |  x           |  x           |  x           |
-panel track         |  x           |  x (1)       |  NA          |
-chair               |  x           |  x           |  x           |
-chair affiliation   |  x           |  x           |  x           |
-discussant          |  x           |  NA (2)      |  x           |
-discussant affil.   |  x           |  NA (2)      |  x           |
-abstract id (file)  |  x           |  x           |  x           |
-abstract ref        |  x           |  x           |  x           |
-abstract title      |  x           |  x           |  x           |
-abstract text       |  x           |  x           |  x           |
-abstract presenters |  x           |  x           |  x           |
-abstract topic      |  NA          |  NA          |  x (3)       |
-abstract authors    |  x           |  x           |  x           |
-author affiliations |  x           |  x           |  x           |
-first names         |  NA          |  NA          |  NA          |
-family names        |  NA          |  NA          |  NA          |
-gender              |  NA          |  NA          |  NA          |
+|                   | [2019][19] | [2020][20] | [2021][21] | [2022][22] | [2023][23] |
+|:------------------|:----------:|:----------:|:----------:|:----------:|:----------:|
+panel id (file)     |  x         |  x         |  x         |  x         |  x         |
+panel ref           |  x         |  NA        |  NA        |  NA        |  x         |
+panel title         |  x         |  x         |  x         |  x         |  x         |
+panel track         |  x         |  x (1)     |  NA        |  NA        |  x         |
+chair               |  x         |  x         |  x         |  x         |  x         |
+chair affiliation   |  x         |  x         |  x         |  .         |  x         |
+discussant          |  x         |  NA (2)    |  x         |  x         |  x         |
+discussant affil.   |  x         |  NA (2)    |  x         |  .         |  x         |
+abstract id (file)  |  x         |  x         |  x         |  x         |  x         |
+abstract ref        |  x         |  x         |  x         |  x         |  x         |
+abstract title      |  x         |  x         |  x         |  x         |  x         |
+abstract text       |  x         |  x         |  x         |  x         |  x         |
+abstract presenters |  x         |  x         |  x         |  x         |  x         |
+abstract topic      |  NA        |  NA        |  x (3)     |  x (3)     |  NA        |
+abstract authors    |  x         |  x         |  x         |  x         |  x         |
+author affiliations |  x         |  x         |  x         |  x         |  x         |
+first names         |  NA        |  NA        |  NA        |  NA        |  NA        |
+family names        |  NA        |  NA        |  NA        |  NA        |  NA        |
+gender              |  NA        |  NA        |  NA        |  NA        |  NA        |
 
 1. contains missing values
 2. no discussants that year (only chairs, alternatively called 'moderators')
-3. uses the same values as panel tracks, but changes within each panel
+3. uses the same values as panel tracks in other years, but varies within each panel
 
 [2019]: https://github.com/briatte/epsa2019/blob/main/data/program.tsv
 [2020]: https://github.com/briatte/epsa2020/blob/master/data/program.tsv
 [2021]: https://github.com/briatte/epsa2021/blob/main/data/program.tsv
+[2022]: https://github.com/briatte/epsa2022/blob/main/data/program.tsv
+[2023]: https://github.com/briatte/epsa2023/blob/main/data/program.tsv
 
 ## Format
 
@@ -94,45 +105,56 @@ __TODO:__ extract `first_name` and `family_name`, and guess `gender`.
 
 Participants:
 
-- 2019: `dc5d...7ff5` (32-bit, computed before fixing names/affiliations)
-- 2020: `2b94...d199` (32-bit, computed before fixing names/affiliations)
-- 2021: `bd0f...e19e` (32-bit, computed before fixing names/affiliations)
+- 2019: `dc5d...7ff5` (32-bit hashes)
+- 2020: `2b94...d199` (32-bit hashes)
+- 2021: `bd0f...e19e` (32-bit hashes)
+- 2022: ..
+- 2023: `6f5e...4b74` (32-bit hashes)
+
+Hashes are based on names, affiliations (replaced with `"NA"` if missing) and conference year.
 
 Panels:
 
 - 2019: `4555` (fixed-length, 4 digits)
 - 2020: `20`, `212` (variable-length, 2-3 digits)
 - 2021: `3`, `84`, `129` (variable-length, 1-3 digits)
+- 2022: `9`, `11`, `109` (variable-length, 1-3 digits)
+- 2023: `74640` (fixed-length, 5 digits)
+
+Panel UIDs are based on their Web page identifiers rather than on their conference identifiers.
 
 Abstracts:
 
 - 2019: `133452`, `87064` (variable-length, 5-6 digits)
 - 2020: `0008`, `0009` (fixed-length, sequential, left-padded)
 - 2021: `0069`, `0075` (fixed-length, sequential, left-padded)
+- 2022: `0303`, `0304` (fixed-length, sequential, left-padded)
+- 2023: `1`, `97`, `104`, `1043` (variable-length, 1-4 digits)
+
+Abstract UIDs are based on their Web page identifiers rather than on their conference identifiers.
 
 ## Roles
 
 - 2019: `c`, `d`, `p`
 - 2020: `c`, `p` (no discussants that year, only chairs/moderators)
 - 2021: `c`, `d`, `p`
+- 2022: `c`, `d`, `p`
+- 2023: `c`, `d`, `p`
 
-# Combine all years
+# All years
 
 ```r
 library(tidyverse)
 
-# 3,545 rows
-bind_rows(
-  read_tsv("data/epsa2019-program.tsv", col_types = cols(.default = "c")) %>% 
-    add_column(year = 2019L, .before = 1),
-  read_tsv("data/epsa2020-program.tsv", col_types = cols(.default = "c")) %>% 
-    add_column(year = 2020L, .before = 1),
-  read_tsv("data/epsa2021-program.tsv", col_types = cols(.default = "c")) %>% 
-    add_column(year = 2021L, .before = 1)
-) %>% 
-  # 2,007 unique names
-  pull(full_name) %>% 
-  unique() %>% 
-  sort() %>% 
-  length()
+# 3291 unique participants...
+fs::dir_ls("data", regexp = "epsa\\d{4}-program") %>%
+    map_dfr(read_tsv, col_types = cols(.default = "c")) %>% 
+    pull(full_name) %>% 
+    unique() %>% 
+    length()
+
+# ... across 6827 conference panels
+fs::dir_ls("data", regexp = "epsa\\d{4}-program") %>%
+    map_dfr(read_tsv, col_types = cols(.default = "c")) %>% 
+    nrow()
 ```
