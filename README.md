@@ -10,9 +10,9 @@ __TODO:__ document year 2022 below.
 
 This repository is __work in progress__, and some links point to a private repository. See the [issues](issues) for further details.
 
-Some scripts require external resources not included in the repo: `fix-affiliations`, in particular, requires [this spreadsheet of manual checks and corrections to ROR guesses](###), as well as a [ROR data dump](https://ror.readme.io/docs/data-dump), to be located in the `data` folder.
+Some scripts require external resources not included in the repo: `fix-affiliations`, in particular, requires [this spreadsheet of manual checks and corrections to ROR guesses][ror-corrections], as well as a [ROR data dump](https://ror.readme.io/docs/data-dump), to be located in the `data` folder.
 
-__TODO:__ add spreadsheet link.
+[ror-corrections]: https://docs.google.com/spreadsheets/d/1GIs-WbimjXSnr86PgMOWBZofH887Y8kYZkw8q5ce8Yg/edit?usp=sharing
 
 # Data
 
@@ -24,8 +24,8 @@ __TODO:__ add spreadsheet link.
 | Abstracts        |  802 |  136 |  517 |  ... | 1127 |
 | Edges (2)        | 1964 |  319 | 1262 |  ... | 2912 |
 
-1. After minimal data cleaning; the number of unique affiliations, in particular, is highly inflated.
-2. Defined as the presence of a participant `i` in a conference panel `j` as either chair (`"c"`), discussant (`"d"`) or presenter (`"p"`).
+1. After minimal data cleaning; real figures are lower, and the number of unique affiliations, in particular, is highly inflated.
+2. Defined as the presence of a participant `i` in a conference panel `j` as either chair (`c`), discussant (`d`) or presenter (`p`).
 
 ```r
 library(tidyverse)
@@ -69,11 +69,11 @@ gender              |  NA        |  NA        |  NA        |  NA        |  NA   
 2. no discussants that year (only chairs, alternatively called 'moderators')
 3. uses the same values as panel tracks in other years, but varies within each panel
 
-[2019]: https://github.com/briatte/epsa2019/blob/main/data/program.tsv
-[2020]: https://github.com/briatte/epsa2020/blob/master/data/program.tsv
-[2021]: https://github.com/briatte/epsa2021/blob/main/data/program.tsv
-[2022]: https://github.com/briatte/epsa2022/blob/main/data/program.tsv
-[2023]: https://github.com/briatte/epsa2023/blob/main/data/program.tsv
+[19]: https://github.com/briatte/epsa2019/blob/main/data/program.tsv
+[20]: https://github.com/briatte/epsa2020/blob/master/data/program.tsv
+[21]: https://github.com/briatte/epsa2021/blob/main/data/program.tsv
+[22]: https://github.com/briatte/epsa2022/blob/main/data/program.tsv
+[23]: https://github.com/briatte/epsa2023/blob/main/data/program.tsv
 
 ## Format
 
@@ -153,7 +153,7 @@ fs::dir_ls("data", regexp = "epsa\\d{4}-program") %>%
     unique() %>% 
     length()
 
-# ... across 6827 conference panels
+# ... across 6827 conference participations as chair, discussant or presenter
 fs::dir_ls("data", regexp = "epsa\\d{4}-program") %>%
     map_dfr(read_tsv, col_types = cols(.default = "c")) %>% 
     nrow()
