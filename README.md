@@ -6,8 +6,6 @@ Code to collect and assemble the full programmes of recent [EPSA](https://epsane
 - [`epsa2022`](https://github.com/briatte/epsa2022)
 - [`epsa2023`](https://github.com/briatte/epsa2023)
 
-__TODO:__ document year 2022 below.
-
 This repository is __work in progress__, and some links point to a private repository. See the [issues](issues) for further details.
 
 Some scripts require external resources not included in the repo: `fix-affiliations`, in particular, requires [this spreadsheet of manual checks and corrections to ROR guesses][ror-corrections], as well as a [ROR data dump](https://ror.readme.io/docs/data-dump), to be located in the `data` folder.
