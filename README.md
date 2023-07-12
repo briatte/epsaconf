@@ -18,11 +18,11 @@ Some scripts require external resources not included in the repo: `fix-affiliati
 
 |                  | 2019 | 2020 | 2021 | 2022 | 2023 |
 |:-----------------|:----:|:----:|:----:|:----:|:----:|
-| Participants (1) | 1318 |  298 |  792 |  ... | 1863 |
-| Affiliations (1) |  521 |  189 |  393 |  ... |  635 |
-| Panels           |  186 |   32 |  131 |  ... |  258 |
-| Abstracts        |  802 |  136 |  517 |  ... | 1127 |
-| Edges (2)        | 1964 |  319 | 1262 |  ... | 2912 |
+| Participants (1) | 1318 |  298 |  792 | 1415 | 1863 |
+| Affiliations (1) |  521 |  189 |  393 |  630 |  635 |
+| Panels           |  186 |   32 |  131 |  228 |  258 |
+| Abstracts        |  802 |  136 |  517 |  933 | 1127 |
+| Edges (2)        | 1964 |  319 | 1262 | 2285 | 2912 |
 
 1. After minimal data cleaning; real figures are lower, and the number of unique affiliations, in particular, is highly inflated.
 2. Defined as the presence of a participant `i` in a conference panel `j` as either chair (`c`), discussant (`d`) or presenter (`p`).
@@ -50,9 +50,9 @@ panel ref           |  x         |  NA        |  NA        |  NA        |  x    
 panel title         |  x         |  x         |  x         |  x         |  x         |
 panel track         |  x         |  x (1)     |  NA        |  NA        |  x         |
 chair               |  x         |  x         |  x         |  x         |  x         |
-chair affiliation   |  x         |  x         |  x         |  .         |  x         |
+chair affiliation   |  x         |  x         |  x         |  x         |  x         |
 discussant          |  x         |  NA (2)    |  x         |  x         |  x         |
-discussant affil.   |  x         |  NA (2)    |  x         |  .         |  x         |
+discussant affil.   |  x         |  NA (2)    |  x         |  x         |  x         |
 abstract id (file)  |  x         |  x         |  x         |  x         |  x         |
 abstract ref        |  x         |  x         |  x         |  x         |  x         |
 abstract title      |  x         |  x         |  x         |  x         |  x         |
@@ -108,7 +108,7 @@ Participants:
 - 2019: `dc5d...7ff5` (32-bit hashes)
 - 2020: `2b94...d199` (32-bit hashes)
 - 2021: `bd0f...e19e` (32-bit hashes)
-- 2022: ..
+- 2022: `1a89...5098` (32-bit hashes)
 - 2023: `6f5e...4b74` (32-bit hashes)
 
 Hashes are based on names, affiliations (replaced with `"NA"` if missing) and conference year.
@@ -146,15 +146,19 @@ Abstract UIDs are based on their Web page identifiers rather than on their confe
 ```r
 library(tidyverse)
 
-# 3291 unique participants...
-fs::dir_ls("data", regexp = "epsa\\d{4}-program") %>%
-    map_dfr(read_tsv, col_types = cols(.default = "c")) %>% 
-    pull(full_name) %>% 
-    unique() %>% 
-    length()
+# 5 conference years
+d <- fs::dir_ls("data", regexp = "epsa\\d{4}-program") %>%
+    map(read_tsv, col_types = cols(.default = "c"))
 
-# ... across 6827 conference participations as chair, discussant or presenter
-fs::dir_ls("data", regexp = "epsa\\d{4}-program") %>%
-    map_dfr(read_tsv, col_types = cols(.default = "c")) %>% 
-    nrow()
+# ... 3520 conference papers
+sum(map_int(d, ~ n_distinct(.x$abstract_id)))
+
+# ... 835 conference panels
+sum(map_int(d, ~ n_distinct(.x$session_id)))
+
+# ... 8742 conference participations as chair, discussant or presenter
+nrow(bind_rows(d))
+
+# ... 3892 unique participants
+n_distinct(pull(bind_rows(d), full_name))
 ```
