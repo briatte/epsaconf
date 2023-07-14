@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/387525767.svg)](https://zenodo.org/badge/latestdoi/387525767)
+
 Code to collect and assemble the full programmes of recent [EPSA](https://epsanet.org/) conferences:
 
 - [`epsa2019`](https://github.com/briatte/epsa2019)
