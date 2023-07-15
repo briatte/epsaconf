@@ -1,6 +1,8 @@
+# Program data from EPSA conferences, 2019-2023
+
 [![DOI](https://zenodo.org/badge/387525767.svg)](https://zenodo.org/badge/latestdoi/387525767)
 
-Code to collect and assemble the full programmes of recent [EPSA](https://epsanet.org/) conferences:
+This repository contains R code to collect and assemble the full programmes of recent [EPSA](https://epsanet.org/) conferences:
 
 - [`epsa2019`](https://github.com/briatte/epsa2019)
 - [`epsa2020`](https://github.com/briatte/epsa2020) (virtual event)
@@ -8,24 +10,27 @@ Code to collect and assemble the full programmes of recent [EPSA](https://epsane
 - [`epsa2022`](https://github.com/briatte/epsa2022)
 - [`epsa2023`](https://github.com/briatte/epsa2023)
 
-This repository is __work in progress__, and some links point to a private repository. See the [issues](issues) for further details.
+The master dataset `data/epsa-program.tsv` contains all 5 conference years. Variable descriptions appear in the notes below.
 
-Some scripts require external resources not included in the repo: `fix-affiliations`, in particular, requires [this spreadsheet of manual checks and corrections to ROR guesses][ror-corrections], as well as a [ROR data dump](https://ror.readme.io/docs/data-dump), to be located in the `data` folder.
+This is __work in progress__, and some links point to a private repository. See the [issues](issues) for a list of things that need fixing.
 
-[ror-corrections]: https://docs.google.com/spreadsheets/d/1GIs-WbimjXSnr86PgMOWBZofH887Y8kYZkw8q5ce8Yg/edit?usp=sharing
+Some scripts use external resources: `fix-affiliations`, in particular, uses [this spreadsheet of manual checks and corrections to ROR guesses][ror-corrections], as well as a [ROR data dump](https://ror.readme.io/docs/data-dump) from March 2023.
+
+[ror-corrections]: https://docs.google.com/spreadsheets/d/1DHR7NQCNUOslXO5CA2e9hTla6YWZLPs7Uwqmp-wLATE/edit?usp=sharing
 
 # Data
 
 |                  | 2019 | 2020 | 2021 | 2022 | 2023 |
 |:-----------------|:----:|:----:|:----:|:----:|:----:|
 | Participants (1) | 1318 |  298 |  792 | 1415 | 1863 |
-| Affiliations (1) |  521 |  189 |  393 |  630 |  635 |
+| Affiliations (2) |  328 |  130 |  241 |  348 |  392 |
 | Panels           |  186 |   32 |  131 |  228 |  258 |
 | Abstracts        |  802 |  136 |  517 |  933 | 1127 |
-| Edges (2)        | 1964 |  319 | 1262 | 2285 | 2912 |
+| Edges (3)        | 1964 |  319 | 1262 | 2285 | 2912 |
 
-1. After minimal data cleaning; real figures are lower, and the number of unique affiliations, in particular, is highly inflated.
-2. Defined as the presence of a participant `i` in a conference panel `j` as either chair (`c`), discussant (`d`) or presenter (`p`).
+1. Names have not been harmonised across datasets.
+2. Affiliations have been cleaned and identified with their [ROR](https://ror.org/) IDs.
+3. Defined as the presence of a participant `i` in a conference panel `j` as either chair (`c`), discussant (`d`) or presenter (`p`).
 
 ```r
 library(tidyverse)
@@ -38,7 +43,7 @@ fs::dir_ls("data", regexp = "epsa\\d{4}") %>%
 # unique affiliations
 fs::dir_ls("data", regexp = "epsa\\d{4}-participants") %>%
   map(read_tsv, col_types = cols(.default = "c")) %>%
-  map_int(~ n_distinct(.x$affiliation))
+  map_int(~ n_distinct(.x$affiliation_ror))
 ```
 
 ## Variables
@@ -99,8 +104,6 @@ $ abstract_text       <chr> NA, NA, "My contribution to this roundtable on J…
 $ abstract_presenters <chr> NA, NA, NA, NA, NA, "Ricardo Carvalho", "André W…
 ```
 
-__TODO:__ extract `first_name` and `family_name`, and guess `gender`.
-
 ## Identifiers (UIDs)
 
 Participants:
@@ -147,17 +150,16 @@ Abstract UIDs are based on their Web page identifiers rather than on their confe
 library(tidyverse)
 
 # 5 conference years
-d <- fs::dir_ls("data", regexp = "epsa\\d{4}-program") %>%
-    map(read_tsv, col_types = cols(.default = "c"))
+d <- read_tsv("data/epsa-program.tsv", col_types = cols(.default = "c"))
 
-# ... 3520 conference papers
-sum(map_int(d, ~ n_distinct(.x$abstract_id)))
+# ... 3515 conference papers
+nrow(drop_na(distinct(d, year, abstract_id), abstract_id))
 
 # ... 835 conference panels
-sum(map_int(d, ~ n_distinct(.x$session_id)))
+nrow(drop_na(distinct(d, year, session_id), session_id))
 
 # ... 8742 conference participations as chair, discussant or presenter
-nrow(bind_rows(d))
+nrow(d)
 
 # ... 3892 unique participants
 n_distinct(pull(bind_rows(d), full_name))
