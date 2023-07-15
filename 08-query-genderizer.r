@@ -1,3 +1,7 @@
+library(httr)
+library(jsonlite)
+library(tidyverse)
+
 # matches 'de', 'van', 'von der', or 'X i', or 'X da'
 r <- "^[DdLl][aei]|[Vv][ao]n(\\sder)?$|.*\\si$|.*\\s[Dd][aei]"
 
@@ -62,6 +66,12 @@ if (!fs::file_exists(f)) {
     add_column(count = NA_integer_) %>%
     write_tsv(f)
 
+} else {
+
+  left_join(n, readr::read_tsv(f, col_types = "cccdi"), by = "first_name") %>%
+    select(first_name, name, gender, probability, count) %>%
+    write_tsv(f)
+
 }
 
 repeat {
@@ -71,12 +81,6 @@ repeat {
     filter(is.na(gender)) %>%
     slice_sample(n = 10)
 
-  r <- g$first_name %>%
-    # sanitize: remove non-ASCII characters (as a precaution)
-    stringi::stri_trans_general(id = "Latin-ASCII") %>%
-    str_flatten(collapse = "&name[]=") %>%
-    str_c("https://api.genderize.io/?name[]=", .)
-
   cat("Guessing", str_trunc(str_c(g$first_name, collapse = ", "), 50))
   if (!nrow(g)) {
 
@@ -84,6 +88,12 @@ repeat {
     break
 
   }
+
+  r <- g$first_name %>%
+    # sanitize: remove non-ASCII characters (as a precaution)
+    stringi::stri_trans_general(id = "Latin-ASCII") %>%
+    str_flatten(collapse = "&name[]=") %>%
+    str_c("https://api.genderize.io/?name[]=", .)
 
   r <- try(httr::GET(r))
 
@@ -95,17 +105,17 @@ repeat {
   }
 
   # will fail around 1,000 requests/day (API limit)
-  if(status_code(r) != 200) {
+  if(httr::status_code(r) != 200) {
 
-    cat(":", content(r)$error, "\n")
+    cat(":", httr::content(r)$error, "\n")
     break
 
   }
 
   Sys.sleep(1.5)
 
-  r <- content(r, as = "text") %>%
-    fromJSON(flatten = TRUE) %>%
+  r <- httr::content(r, as = "text") %>%
+    jsonlite::fromJSON(flatten = TRUE) %>%
     # denote unknown genders as missing
     mutate(gender = str_replace_na(gender, "unknown")) %>%
     add_column(first_name = g$first_name, .before = 1)
@@ -114,12 +124,9 @@ repeat {
   g <- readr::read_tsv(f, col_types = "cccdi")
 
   # collate to names list
-  g <- bind_rows(
-    # new additions
-    semi_join(r, g, by = "first_name"),
-    # not yet queried
-    anti_join(g, r, by = "first_name")
-  ) %>%
+  g <- bind_rows(semi_join(r, g, by = "first_name"), # new additions
+                 anti_join(g, r, by = "first_name")) %>% # not yet queried
+    select(first_name, name, gender, probability, count) %>%
     arrange(first_name)
 
   cat("", sum(!is.na(g$gender)), "guessed,", sum(is.na(g$gender)), "left\n")
