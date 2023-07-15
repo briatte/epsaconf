@@ -8,7 +8,7 @@ r <- "^[DdLl][aei]|[Vv][ao]n(\\sder)?$|.*\\si$|.*\\s[Dd][aei]"
 # extract (likely) first names --------------------------------------------
 
 # simple heuristics to get first names from (mostly) Western names
-d <- fs::dir_ls("data", regexp = "participants") %>%
+d <- fs::dir_ls("data", regexp = "epsa\\d{4}-participants") %>%
   map(readr::read_tsv, col_types = cols(.default = "c")) %>%
   map_dfr(select, full_name) %>%
   distinct() %>%
