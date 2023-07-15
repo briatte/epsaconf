@@ -69,6 +69,9 @@ d <- d %>%
 
 # export master dataset ---------------------------------------------------
 
+# final cleanup step
+d <- mutate_if(d, is.character, ~ str_replace_all(.x, "\\n", " "))
+
 readr::write_tsv(d, "data/epsa-program.tsv")
 
 # kthxbye
