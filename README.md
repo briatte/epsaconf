@@ -4,19 +4,19 @@
 
 This repository contains R code to collect and assemble the full programmes of recent [EPSA](https://epsanet.org/) conferences:
 
-- [`epsa2019`](https://github.com/briatte/epsa2019)
-- [`epsa2020`](https://github.com/briatte/epsa2020) (virtual event)
-- [`epsa2021`](https://github.com/briatte/epsa2021) (virtual event)
-- [`epsa2022`](https://github.com/briatte/epsa2022)
-- [`epsa2023`](https://github.com/briatte/epsa2023)
+- [EPSA 2019](https://github.com/briatte/epsa2019)
+- [EPSA 2020](https://github.com/briatte/epsa2020) (virtual event)
+- [EPSA 2021](https://github.com/briatte/epsa2021) (virtual event)
+- [EPSA 2022](https://github.com/briatte/epsa2022)
+- [EPSA 2023](https://github.com/briatte/epsa2023)
 
-The master dataset `data/epsa-program.tsv` contains all 5 conference years. Variable descriptions appear in the notes below.
+The master dataset `data/epsa-program.tsv` contains all 5 conference years. Details on variables appear in the notes below.
 
-This is __work in progress__, and some links point to a private repository. See the [issues](issues) for a list of things that need fixing.
-
-Some scripts use external resources: `fix-affiliations`, in particular, uses [this spreadsheet of manual checks and corrections to ROR guesses][ror-corrections], as well as a [ROR data dump](https://ror.readme.io/docs/data-dump) from March 2023.
+The `data/` folder contains two external resources used to fix affiliations: [this spreadsheet of manual checks and corrections to ROR guesses][ror-corrections], and a [ROR data dump](https://ror.readme.io/docs/data-dump) from March 2023.
 
 [ror-corrections]: https://docs.google.com/spreadsheets/d/1DHR7NQCNUOslXO5CA2e9hTla6YWZLPs7Uwqmp-wLATE/edit?usp=sharing
+
+This is __work in progress__, and some links point to a private repository. See the [issues](issues) for a list of things that need fixing.
 
 # Data
 
