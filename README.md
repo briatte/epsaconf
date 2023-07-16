@@ -51,7 +51,7 @@ fs::dir_ls("data", regexp = "epsa\\d{4}-participants") %>%
 |                   | [2019][19] | [2020][20] | [2021][21] | [2022][22] | [2023][23] |
 |:------------------|:----------:|:----------:|:----------:|:----------:|:----------:|
 panel id (file)     |  x         |  x         |  x         |  x         |  x         |
-panel ref           |  x         |  NA        |  NA        |  NA        |  x         |
+panel ref           |  x         |  NA        |  NA        |  NA        |  x (1)     |
 panel title         |  x         |  x         |  x         |  x         |  x         |
 panel track         |  x         |  x (1)     |  NA        |  NA        |  x         |
 panel type          |  x (1)     |  x         |  x         |  x         |  x (1)     |
