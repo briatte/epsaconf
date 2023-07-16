@@ -1,6 +1,6 @@
 # Program data from EPSA conferences, 2019-2023
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8151267.svg)](https://doi.org/10.5281/zenodo.8151267)
+[![DOI](https://zenodo.org/badge/387525767.svg)](https://zenodo.org/badge/latestdoi/387525767)
 
 This repository contains R code to collect and assemble the full programmes of recent [EPSA](https://epsanet.org/) conferences:
 
