@@ -10,7 +10,7 @@ if (!fs::file_exists(f)) {
 
 }
 
-d <- readr::read_tsv(f, col_types = "cccccccccccc")
+d <- readr::read_tsv(f, col_types = cols(.default = "c"))
 
 # edges -------------------------------------------------------------------
 
