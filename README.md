@@ -56,9 +56,9 @@ panel title         |  x         |  x         |  x         |  x         |  x    
 panel track         |  x         |  x (1)     |  NA        |  NA        |  x         |
 panel type          |  x (1)     |  x         |  x         |  x         |  x (1)     |
 chair               |  x         |  x         |  x         |  x         |  x         |
-chair affiliation   |  x         |  x         |  x         |  x         |  x         |
+chair affiliation   |  x (4)     |  x (4)     |  x (4)     |  x (4)     |  x (4)     |
 discussant          |  x         |  NA (2)    |  x         |  x         |  x         |
-discussant affil.   |  x         |  NA (2)    |  x         |  x         |  x         |
+discussant affil.   |  x (4)     |  NA (2)    |  x (4)     |  x (4)     |  x (4)     |
 abstract id (file)  |  x         |  x         |  x         |  x         |  x         |
 abstract ref        |  x         |  x         |  x         |  x         |  x         |
 abstract title      |  x         |  x         |  x         |  x         |  x         |
@@ -66,14 +66,15 @@ abstract text       |  x         |  x         |  x         |  x         |  x    
 abstract presenters |  x         |  x         |  x         |  x         |  x         |
 abstract topic      |  NA        |  NA        |  x (3)     |  x (3)     |  NA        |
 abstract authors    |  x         |  x         |  x         |  x         |  x         |
-author affiliations |  x         |  x         |  x         |  x         |  x         |
 first names         |  NA        |  NA        |  NA        |  NA        |  NA        |
 family names        |  NA        |  NA        |  NA        |  NA        |  NA        |
 gender              |  NA        |  NA        |  NA        |  NA        |  NA        |
+author affiliations |  x (4)     |  x (4)     |  x (4)     |  x (4)     |  x (4)     |
 
 1. contains missing values
 2. no discussants that year (only chairs, alternatively called 'moderators')
 3. uses the same values as panel tracks in other years, but varies within each panel
+4. manually checked and, when possible, matched to [ROR](https://ror.org/) identifiers (first affiliation used when there are more than one)
 
 [19]: https://github.com/briatte/epsa2019/blob/main/data/program.tsv
 [20]: https://github.com/briatte/epsa2020/blob/master/data/program.tsv
