@@ -8,7 +8,7 @@ d <- fs::dir_ls("data", regexp = "epsa\\d{4}-program") %>%
 # guessed genders ---------------------------------------------------------
 
 d <- d %>%
-  # same routin as in `08-query-genderizer.r` to ensure matches
+  # same routine as in `08-query-genderizer.r` to ensure matches
   mutate(
     # remove brackets in 'Alice (Yunyun) Smith'
     first_name = str_remove_all(full_name, "\\(|\\)") %>%
