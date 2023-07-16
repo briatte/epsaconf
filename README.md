@@ -66,15 +66,14 @@ abstract text       |  x         |  x         |  x         |  x         |  x    
 abstract presenters |  x         |  x         |  x         |  x         |  x         |
 abstract topic      |  NA        |  NA        |  x (3)     |  x (3)     |  NA        |
 abstract authors    |  x         |  x         |  x         |  x         |  x         |
-first names         |  NA        |  NA        |  NA        |  NA        |  NA        |
-family names        |  NA        |  NA        |  NA        |  NA        |  NA        |
-gender              |  NA        |  NA        |  NA        |  NA        |  NA        |
 author affiliations |  x (4)     |  x (4)     |  x (4)     |  x (4)     |  x (4)     |
+gender              |  x (5)     |  x (5)     |  x (5)     |  x (5)     |  x (5)     |
 
 1. contains missing values
 2. no discussants that year (only chairs, alternatively called 'moderators')
 3. uses the same values as panel tracks in other years, but varies within each panel
 4. manually checked and, when possible, matched to [ROR](https://ror.org/) identifiers (first affiliation used when there are more than one)
+5. guessed by [genderize.io](https://genderize.io/), with a few `"unknown"` results
 
 [19]: https://github.com/briatte/epsa2019/blob/main/data/program.tsv
 [20]: https://github.com/briatte/epsa2020/blob/master/data/program.tsv
