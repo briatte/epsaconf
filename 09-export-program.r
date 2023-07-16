@@ -62,8 +62,12 @@ d <- d %>%
 
 # export master dataset ---------------------------------------------------
 
-# final cleanup step
-d <- mutate_if(d, is.character, ~ str_replace_all(.x, "\\n", " "))
+# final cleanup steps
+d <- mutate_if(d, is.character, ~ str_replace_all(.x, "\\n", " ")) %>%
+  mutate(
+    across(matches("(abstract|session)_"),
+           ~ str_squish(str_replace_all(.x, "\\\"+", "'")))
+  )
 
 readr::write_tsv(d, "data/epsa-program.tsv")
 
