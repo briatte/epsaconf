@@ -32,14 +32,7 @@ d <- left_join(d, select(g, -name, -probability, -count), by = "first_name") %>%
 
 a <- read_tsv("data/ror-affiliations.tsv")
 d <- select(left_join(d, a, by = "affiliation"), -affiliation) %>%
-  relocate(affiliation_ror, .after = "gender") %>%
-  mutate(
-    # until last NA values in `affiliation` have been handled
-    affiliation_ror = str_replace_na(affiliation_ror)
-  )
-
-# TODO: fix, two persons from 2019 missing an affiliation
-filter(d, affiliation_ror == "NA")
+  relocate(affiliation_ror, .after = "gender")
 
 # sanity checks
 stopifnot(!is.na(d$affiliation_ror))
