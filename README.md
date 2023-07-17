@@ -69,9 +69,9 @@ abstract authors    |  x         |  x         |  x         |  x         |  x    
 affiliations        |  x (4)     |  x (4)     |  x (4)     |  x (4)     |  x (4)     |
 genders             |  x (5)     |  x (5)     |  x (5)     |  x (5)     |  x (5)     |
 
-1. These variables contain some missing values (`NA`).
+1. Contain some missing values (`NA`).
 2. There were no discussants that year, only chairs, called 'moderators' in the data.
-3. This variable uses the same values as panel tracks in other years, but varies within each panel
+3. Ues the same values as panel tracks in other years, but varies within each panel.
 4. Affiliations are available for chairs, discussants and authors. They have been manually checked and, when possible, matched to [ROR](https://ror.org/) identifiers (the first affiliation was used when there were more than one). Raw affiliations are available from the programs in the repositories from which we import the data.
 5. Genders were guessed by [genderize.io](https://genderize.io/), with a few `"unknown"` results, based on the first part of the full names of the participants.
 
