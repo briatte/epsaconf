@@ -64,8 +64,8 @@ abstract ref        |  x         |  x         |  x         |  x         |  x    
 abstract title      |  x         |  x         |  x         |  x         |  x         |
 abstract text       |  x         |  x         |  x         |  x         |  x         |
 abstract topic      |  NA        |  NA        |  x (3)     |  x (3)     |  NA        |
-abstract presenters |  x         |  x         |  x         |  x         |  x         |
 abstract authors    |  x         |  x         |  x         |  x         |  x         |
+abstract presenters |  x         |  x         |  x         |  x         |  x         |
 affiliations        |  x (4)     |  x (4)     |  x (4)     |  x (4)     |  x (4)     |
 genders             |  x (5)     |  x (5)     |  x (5)     |  x (5)     |  x (5)     |
 
@@ -224,6 +224,21 @@ fs::dir_ls("data", regexp = "epsa\\d{4}-edges") %>%
   map(select, -year) %>% 
   map(~ add_count(group_by(.x, j))) %>% # number of participants per panel
   map(igraph::graph_from_data_frame)
+
+# one-mode (participant-to-participant), weighted by shared panel appearances
+fs::dir_ls("data", regexp = "epsa\\d{4}-edges") %>%
+  map(read_tsv, col_types = cols(.default = "c")) %>%
+  map(select, i, j) %>% 
+  # treating all participations to a panel (c, d, p) as a single tie
+  map(distinct) %>% 
+  # link participants i.x to participants i.y over panels j
+  map2(., ., full_join, by = "j") %>% 
+  # remove self-ties and de-duplicate i -> j and j -> i
+  map(filter, i.x < i.y) %>% 
+  map(select, -j, i = i.x, j = i.y) %>% 
+  # edge weights n = number of shared panel appearances (1 to 3)
+  map(count, i, j, sort = TRUE) %>% 
+  map(igraph::graph_from_data_frame, directed = FALSE)
 ```
 
 Feel free to open an issue to discuss additional constructors.
