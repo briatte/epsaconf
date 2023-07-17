@@ -1,4 +1,4 @@
-# Program data from EPSA conferences, 2019-2023
+# Data from EPSA conferences, 2019-2023
 
 [![DOI](https://zenodo.org/badge/387525767.svg)](https://zenodo.org/badge/latestdoi/387525767)
 
