@@ -4,19 +4,39 @@
 
 This repository contains R code to collect and assemble the full programmes of recent [EPSA](https://epsanet.org/) conferences:
 
-- [EPSA 2019](https://github.com/briatte/epsa2019)
-- [EPSA 2020](https://github.com/briatte/epsa2020) (virtual event)
-- [EPSA 2021](https://github.com/briatte/epsa2021) (virtual event)
-- [EPSA 2022](https://github.com/briatte/epsa2022)
-- [EPSA 2023](https://github.com/briatte/epsa2023)
+| Conference year                  | GitHub      | Online programme        |
+|:---------------------------------|:-----------:|:------------------------|
+| [EPSA 2019][y19]                 | [repo][r19] | [Oxford Abstracts][p19] |
+| [EPSA 2020][y20] (virtual event) | [repo][r20] | [COMS.events][p20]      |
+| [EPSA 2021][y21] (virtual event) | [repo][r21] | [COMS.events][p21]      |
+| [EPSA 2022][y22]                 | [repo][r22] | [COMS.events][p22]      |
+| [EPSA 2023][y23]                 | [repo][r23] | [Oxford Abstracts][p23] |
 
-The master dataset `data/epsa-program.tsv` contains all 5 conference years. Details on variables appear in the notes below.
+[y19]: https://epsanet.org/epsa2019/
+[y20]: https://epsanet.org/epsa2020/
+[y21]: https://epsanet.org/epsa2021/
+[y22]: https://epsanet.org/epsa2022/
+[y23]: https://epsanet.org/epsa-2023-programme-committee/
 
-The `data/` folder contains two external resources used to fix affiliations: [this spreadsheet of manual checks and corrections to ROR guesses][ror-corrections], and a [ROR data dump](https://ror.readme.io/docs/data-dump) from March 2023.
+[r19]: https://github.com/briatte/epsa2019
+[r20]: https://github.com/briatte/epsa2020
+[r21]: https://github.com/briatte/epsa2021
+[r22]: https://github.com/briatte/epsa2022
+[r23]: https://github.com/briatte/epsa2023
 
-[ror-corrections]: https://docs.google.com/spreadsheets/d/1DHR7NQCNUOslXO5CA2e9hTla6YWZLPs7Uwqmp-wLATE/edit?usp=sharing
+[p19]: https://virtual.oxfordabstracts.com/#/event/public/772/program
+[p20]: https://coms.events/EPSA-2020/en/
+[p21]: https://coms.events/epsa2021/en/
+[p22]: https://coms.events/epsa-2022/en/
+[p23]: https://virtual.oxfordabstracts.com/#/event/3738/information
 
-This is __work in progress__, and some links point to a private repository. See the [issues](issues) for a list of things that need fixing.
+The master dataset [`data/epsa-program.tsv`][prgm] contains all 5 conference years. Details on variables appear in the notes below.
+
+The code starts by importing the conference programme located in each of the repositories listed above. It then applies some corrections to academic affiliations, guesses genders, performs a few more cleaning routines, updates participant hashes, and creates the master dataset. The single-year programmes, with uncorrected academic affiliations, are preserved for reference.
+
+This is __work in progress__. See the [issues](issues) for a list of things that still need fixing. In the unlikely event that you need to run the code on your side (the TSV master dataset should be usable without doing so), please feel free to ask for help if something does not work as expected.
+
+[prgm]: https://github.com/briatte/epsaconf/blob/main/data/epsa-program.tsv
 
 # Data
 
@@ -31,8 +51,10 @@ For each conference year, we collected information on the conference panels, the
 | Edges (3)        | 1964 |  319 | 1262 | 2285 | 2912 |
 
 1. The names of the participants have not been harmonised across datasets. The data contain 32-bit hashes to identify unique participants _in a single conference year_, based on his or her name and affiliation, in addition to the conference year. You will need to generate new hashes to identify e.g. participants with identical names throughout _all conference years_.
-2. Academic affiliations (which are not always academic) have been cleaned and identified with their [ROR](https://ror.org/) IDs. A few participants have affiliations with no ROR record, and independent researchers have been assigned special value `"(independent)"` as their affiliation.
+2. Academic affiliations (which are not always academic) have been cleaned and identified with their [ROR][ror] IDs. A few participants have affiliations with no ROR record, and independent researchers have been assigned special value `"(independent)"` as their affiliation.
 3. Defined as the presence of a participant `i` in a conference panel `j` as either chair (`c`), discussant (`d`) or presenter (`p`). This is only one of the (one-mode or two-mode, at least) networks that can be built from the data. See the section on networks for further notes.
+
+[ror]: https://ror.org/
 
 ```r
 library(tidyverse)
@@ -48,47 +70,49 @@ fs::dir_ls("data", regexp = "epsa\\d{4}-participants") %>%
   map_int(~ n_distinct(.x$affiliation_ror))
 ```
 
+The `data/` folder also contains two external resources used to fix affiliations: [this spreadsheet of manual checks and corrections to ROR guesses][ror-corrections], and a [ROR data dump](https://ror.readme.io/docs/data-dump) from March 2023.
+
+[ror-corrections]: https://docs.google.com/spreadsheets/d/1DHR7NQCNUOslXO5CA2e9hTla6YWZLPs7Uwqmp-wLATE/edit?usp=sharing
+
 ## Variables
 
-|                   | [2019][19] | [2020][20] | [2021][21] | [2022][22] | [2023][23] |
-|:------------------|:----------:|:----------:|:----------:|:----------:|:----------:|
-panel id (file)     |  x         |  x         |  x         |  x         |  x         |
-panel ref           |  x         |  NA        |  NA        |  NA        |  x (1)     |
-panel title         |  x         |  x         |  x         |  x         |  x         |
-panel track         |  x         |  x (1)     |  NA        |  NA        |  x         |
-panel type          |  x (1)     |  x         |  x         |  x         |  x (1)     |
-panel chairs        |  x         |  x         |  x         |  x         |  x         |
-panel discussants   |  x         |  NA (2)    |  x         |  x         |  x         |
-abstract id (file)  |  x         |  x         |  x         |  x         |  x         |
-abstract ref        |  x         |  x         |  x         |  x         |  x         |
-abstract title      |  x         |  x         |  x         |  x         |  x         |
-abstract text       |  x         |  x         |  x         |  x         |  x         |
-abstract topic      |  NA        |  NA        |  x (3)     |  x (3)     |  NA        |
-abstract authors    |  x         |  x         |  x         |  x         |  x         |
-abstract presenters |  x         |  x         |  x         |  x         |  x         |
-affiliations        |  x (4)     |  x (4)     |  x (4)     |  x (4)     |  x (4)     |
-genders             |  x (5)     |  x (5)     |  x (5)     |  x (5)     |  x (5)     |
+Contents of [`data/epsa-program.tsv`][prgm]:
 
-1. Contain some missing values (`NA`).
+|                     | 2019  | 2020   | 2021  | 2022  | 2023  |
+|:--------------------|:-----:|:------:|:-----:|:-----:|:-----:|
+| panel id (file)     | x     | x      | x     | x     | x     |
+| panel ref           | x     | NA     | NA    | NA    | x (1) |
+| panel title         | x     | x      | x     | x     | x     |
+| panel track         | x     | x (1)  | NA    | NA    | x     |
+| panel type          | x (1) | x      | x     | x     | x (1) |
+| panel chairs        | x     | x      | x     | x     | x     |
+| panel discussants   | x     | NA (2) | x     | x     | x     |
+| abstract id (file)  | x     | x      | x     | x     | x     |
+| abstract ref        | x     | x      | x     | x     | x     |
+| abstract title      | x     | x      | x     | x     | x     |
+| abstract text       | x     | x      | x     | x     | x     |
+| abstract topic      | NA    | NA     | x (3) | x (3) | NA    |
+| abstract authors    | x     | x      | x     | x     | x     |
+| abstract presenters | x     | x      | x     | x     | x     |
+| affiliations        | x (4) | x (4)  | x (4) | x (4) | x (4) |
+| genders             | x (5) | x (5)  | x (5) | x (5) | x (5) |
+
+1. Contains some missing values (`NA`).
 2. There were no discussants that year, only chairs, called 'moderators' in the data.
 3. Ues the same values as panel tracks in other years, but varies within each panel.
-4. Affiliations are available for chairs, discussants and authors. They have been manually checked and, when possible, matched to [ROR](https://ror.org/) identifiers (the first affiliation was used when there were more than one). Raw affiliations are available from the programs in the repositories from which we import the data.
+4. Affiliations are available for chairs, discussants and authors. They have been manually checked and, when possible, matched to [ROR][ror] identifiers (the first affiliation was used when there were more than one). Raw affiliations are available in the single-year programmes.
 5. Genders were guessed by [genderize.io](https://genderize.io/), with a few `"unknown"` results, based on the first part of the full names of the participants.
-
-[19]: https://github.com/briatte/epsa2019/blob/main/data/program.tsv
-[20]: https://github.com/briatte/epsa2020/blob/master/data/program.tsv
-[21]: https://github.com/briatte/epsa2021/blob/main/data/program.tsv
-[22]: https://github.com/briatte/epsa2022/blob/main/data/program.tsv
-[23]: https://github.com/briatte/epsa2023/blob/main/data/program.tsv
 
 Full-text variables (like titles and abstracts) have been only minimally cleaned to avoid having line breaks and double quotes in the (TSV) data. All other text, punctuation and special characters have been preserved.
 
 ## Format
 
-See [stage/issues/38](https://github.com/briatte/stage/issues/38) and [the related wiki page](https://github.com/briatte/stage/wiki/Format-des-donn%C3%A9es).
+Overview of the [`data/epsa-program.tsv`][prgm] dataset:
 
-Overview of the `data/epsa-program.tsv` dataset:
-
+```r
+library(tidyverse)
+glimpse(read_tsv("data/epsa-program.tsv"))
+```
 ```
 Rows: 8,742
 Columns: 20
@@ -114,10 +138,7 @@ $ affiliation_ccode <chr> "US", "NO", "GB", "GB", "GB", "PT", "CH", "US", …
 $ affiliation_cname <chr> "United States", "Norway", "United Kingdom", "Un…
 ```
 
-```r
-library(tidyverse)
-glimpse(read_tsv("data/epsa-program.tsv"))
-```
+See [stage/issues/38](https://github.com/briatte/stage/issues/38) and [the related wiki page](https://github.com/briatte/stage/wiki/Format-des-donn%C3%A9es) for details (the links point to a private repository, sorry).
 
 ## Unique identifiers (UIDs)
 
