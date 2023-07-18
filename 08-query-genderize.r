@@ -51,15 +51,15 @@ n <- select(d, first_name) %>%
   filter(!is.na(first_name)) %>%
   distinct()
 
-# guess names via genderizer.io -------------------------------------------
-cat("Querying genderizer.io for", nrow(n), "first names...\n")
+# guess names via genderize.io --------------------------------------------
+cat("Querying genderize.io for", nrow(n), "first names...\n")
 
-f <- "data/genderizer-results.tsv"
+f <- "data/genderize-results.tsv"
 if (!fs::file_exists(f)) {
 
   # init
   n %>%
-    # name as sent to genderizer.io (sanitized)
+    # name as sent to genderize.io (sanitized)
     add_column(name = NA_character_) %>%
     add_column(gender = NA_character_) %>%
     add_column(probability = NA_real_) %>%
